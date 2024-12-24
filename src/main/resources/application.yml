@@ -1,1 +1,30 @@
-spring.application.name=review-service
+server:
+  port: 7711
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    threads:
+      max: 50
+      min-spare: 5
+  shutdown: graceful
+spring:
+  flyway:
+    baseline-on-migrate: true
+  application:
+    name: review-service
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/deliveryservice?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    hikari:
+      connection-timeout: 2000
+      maximum-pool-size: 5
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+swfm:
+  file-service-url: ${SELECT_SERVICE_URL:http://localhost:7009}/selectImage

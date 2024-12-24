@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.newslistservice.mapper.NewsMapper">
+
+    <insert id="insertReview" parameterType="com.example.reviewservice.domain.Review">
+        INSERT INTO review (title, content, rating , img)
+        VALUES (#{title}, #{content}, #{rating} #{img})
+    </insert>
+
+    <resultMap id="reviewDetailResultMap" type="com.example.reviewservice.dto.DetailReviewDTO">
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="rating" column="rating"/>
+        <result property="img" column="img"/>
+    </resultMap>
+
+
+    <select id="selectReviewById" resultType="com.example.reviewservice.dto.DetailReviewDTO" parameterType="Long">
+        SELECT
+            title, content,rating, img
+        FROM board
+        WHERE
+            id = #{id}
+    </select>
+
+    <delete id="deleteByIds">
+        DELETE FROM board WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateReview" parameterType="com.example.reviewservice.domain.Review">
+        UPDATE board
+        SET
+            title = #{title},
+            content = #{content},
+            rating = #{rating}
+            img = #{img}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectReviewsList" resultMap="newsResultMap">
+        SELECT id,title, rating , created_at
+        FROM board
+        ORDER BY id DESC
+    </select>
+
+
+
+</mapper>
