@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.newslistservice.mapper.NewsMapper">
+<mapper namespace="com.example.reviewservice.mapper.ReviewMapper">
 
     <insert id="insertReview" parameterType="com.example.reviewservice.domain.Review">
-        INSERT INTO review (title, content, rating , img)
-        VALUES (#{title}, #{content}, #{rating} #{img})
+        INSERT INTO review (title, content, author_id, rating, img)
+        VALUES (#{title}, #{content}, #{authorId}, #{rating}, #{img})
     </insert>
 
     <resultMap id="reviewDetailResultMap" type="com.example.reviewservice.dto.DetailReviewDTO">
@@ -17,38 +17,35 @@
         <result property="img" column="img"/>
     </resultMap>
 
-
-    <select id="selectReviewById" resultType="com.example.reviewservice.dto.DetailReviewDTO" parameterType="Long">
+    <select id="selectReviewById" resultMap="reviewDetailResultMap" parameterType="Long">
         SELECT
-            title, content,rating, img
-        FROM board
+            title, content, rating, img
+        FROM review
         WHERE
             id = #{id}
     </select>
 
     <delete id="deleteByIds">
-        DELETE FROM board WHERE id IN
+        DELETE FROM review WHERE id IN
         <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
 
     <update id="updateReview" parameterType="com.example.reviewservice.domain.Review">
-        UPDATE board
+        UPDATE review
         SET
             title = #{title},
             content = #{content},
-            rating = #{rating}
+            rating = #{rating},
             img = #{img}
         WHERE id = #{id}
     </update>
 
-    <select id="selectReviewsList" resultMap="newsResultMap">
-        SELECT id,title, rating , created_at
-        FROM board
+    <select id="selectReviewsList" resultMap="reviewDetailResultMap">
+        SELECT id, title, author_id, rating, created_at
+        FROM review
         ORDER BY id DESC
     </select>
-
-
 
 </mapper>
