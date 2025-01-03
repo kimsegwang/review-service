@@ -13,6 +13,6 @@ import java.util.List;
 public class ReviewDetailDTO {
     private String title;
     private String content;
-    private int rating;
+    private double rating;
     private List<String> img;
 }

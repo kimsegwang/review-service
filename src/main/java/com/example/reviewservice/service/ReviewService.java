@@ -24,12 +24,12 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final FileClient fileClient;
 
-    //전체리뷰
+    //전체리뷰 리스트
     public List<Review> SelectReviewsList() {
         return reviewMapper.selectReviewsList();
     }
 
-    //개인리뷰
+    //개인리뷰 리스트
 
 
 
@@ -56,6 +56,16 @@ public class ReviewService {
             throw new RuntimeException("Failed to insert review");
         }
 
+    }
+
+    //리뷰 수정
+
+    @Transactional
+    public void updateReview(Review review) {
+        List<String> imagePaths = parseImagePaths(review.getImg());
+        String imgString = String.join(";", imagePaths);
+        review.setImg(imgString);
+        reviewMapper.updateReview(review);
     }
 
     //상세 리뷰
@@ -92,12 +102,7 @@ public class ReviewService {
     }
 
 
-    //리뷰 수정
 
-    @Transactional
-    public void updateReview(Review review) {
-        reviewMapper.updateReview(review);// Mapper 호출
-    }
 
 
 }

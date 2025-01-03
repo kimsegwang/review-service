@@ -8,6 +8,6 @@ import lombok.Setter;
 public class DetailReviewDTO {
     private String title;
     private String content;
-    private int rating;
+    private double rating;
     private String img;
 }

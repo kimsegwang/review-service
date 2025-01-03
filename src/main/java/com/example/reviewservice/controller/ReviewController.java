@@ -20,18 +20,21 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    //리뷰 작성
     @PostMapping
     public ResponseEntity<Review> post(@Valid @RequestBody Review review) {
         Review createdReview = reviewService.createReview(review);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReview);
     }
 
+    //리뷰 상세
     @GetMapping("/detail")
     public ReviewDetailDTO getNewsId(@RequestParam Long id) {
         return reviewService.getReviewId(id);
     }
 
 
+    //리뷰 삭제
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@RequestBody List<Long> ids) {
@@ -39,11 +42,13 @@ public class ReviewController {
     }
 
 
+    //리뷰 수정
     @PutMapping
     public void put(@Valid @RequestBody Review review) {
         reviewService.updateReview(review);
     }
 
+    //전체 리뷰
     @GetMapping
     public ReviewListDTO getReviews(
             @RequestParam(value = "page", defaultValue = "1") int page,
@@ -80,6 +85,8 @@ public class ReviewController {
             throw new RuntimeException("뉴스 목록 처리 중 오류 발생", e);
         }
     }
+
+    //개인 전체 리뷰
 
 
 }
