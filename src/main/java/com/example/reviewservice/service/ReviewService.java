@@ -86,10 +86,13 @@ public class ReviewService {
         // Products와 인코딩된 이미지를 매칭하여 DTO 리스트를 생성
 
         return ReviewDetailDTO.builder()
+                .id(ReviewList.getId())
                 .title(ReviewList.getTitle())
                 .content(ReviewList.getContent())
                 .rating(ReviewList.getRating())
                 .img(imgList)
+                .authorId(ReviewList.getAuthorId())
+                .createdAt(ReviewList.getCreatedAt())
                 .build();
     }
 

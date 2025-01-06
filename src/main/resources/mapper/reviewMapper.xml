@@ -11,15 +11,15 @@
     </insert>
 
     <resultMap id="reviewDetailResultMap" type="com.example.reviewservice.dto.DetailReviewDTO">
+        <result property="id" column="id"/>
         <result property="title" column="title"/>
-        <result property="content" column="content"/>
         <result property="rating" column="rating"/>
-        <result property="img" column="img"/>
+        <result property="authorId" column="author_id"/>
     </resultMap>
 
     <select id="selectReviewById" resultMap="reviewDetailResultMap" parameterType="Long">
         SELECT
-            title, content, rating, img
+            id, title, content, rating, img, author_id, created_at
         FROM review
         WHERE
             id = #{id}
@@ -43,7 +43,7 @@
     </update>
 
     <select id="selectReviewsList" resultMap="reviewDetailResultMap">
-        SELECT id, title, author_id, rating, created_at
+        SELECT id, title, author_id, rating
         FROM review
         ORDER BY id DESC
     </select>
