@@ -15,9 +15,11 @@
         <result property="title" column="title"/>
         <result property="rating" column="rating"/>
         <result property="authorId" column="author_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="img" column="img"/>
     </resultMap>
 
-    <select id="selectReviewById" resultMap="reviewDetailResultMap" parameterType="Long">
+    <select id="selectReviewById" resultMap="reviewDetailResultMap">
         SELECT
             id, title, content, rating, img, author_id, created_at
         FROM review
@@ -47,5 +49,13 @@
         FROM review
         ORDER BY id DESC
     </select>
+
+
+    <select id="selectMyReviewOrderIdListList" parameterType="String">
+        SELECT completeProduct, orderId
+        FROM completeproductpay
+        WHERE buyer = #{id} AND review = 0
+    </select>
+
 
 </mapper>

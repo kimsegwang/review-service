@@ -2,6 +2,7 @@ package com.example.reviewservice.mapper;
 
 import com.example.reviewservice.domain.Review;
 import com.example.reviewservice.dto.DetailReviewDTO;
+import com.example.reviewservice.dto.MyReviewOrderIdListDTO;
 import jakarta.validation.Valid;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,4 +21,6 @@ public interface ReviewMapper {
     void updateReview(Review review);
 
     List<Review> selectReviewsList();
+
+    List<MyReviewOrderIdListDTO> selectMyReviewOrderIdListList(String id);
 }

@@ -2,8 +2,10 @@ package com.example.reviewservice.controller;
 
 
 import com.example.reviewservice.domain.Review;
+import com.example.reviewservice.dto.MyReviewOrderIdListDTO;
 import com.example.reviewservice.dto.ReviewDetailDTO;
 import com.example.reviewservice.dto.ReviewListDTO;
+import com.example.reviewservice.dto.ReviewMyListDTO;
 import com.example.reviewservice.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -86,7 +88,51 @@ public class ReviewController {
         }
     }
 
+
     //개인 전체 리뷰
+    @GetMapping("/myReview")
+    public ReviewMyListDTO getMyReviews(
+            @RequestParam String id,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        System.out.println("id =="+id);
+        try {
+            int start = Math.max(0, (page - 1) * pageSize);
+            List<MyReviewOrderIdListDTO> allNewsList = reviewService.SelectMyReviewsList(id);
+            int newsNum = allNewsList.size();
+            int allPage = (int) Math.ceil((double) newsNum / pageSize);
+
+            int end = Math.min(start + pageSize, newsNum);
+
+            if (start >= newsNum) {
+                return ReviewMyListDTO.builder()
+                        .myReviewOrderIdList(List.of())
+                        .reviewNum(newsNum)
+                        .allPage(allPage)
+                        .pageSize(pageSize)
+                        .page(page)
+                        .build();
+            }
+
+            List<MyReviewOrderIdListDTO> paginatedNewsList = allNewsList.subList(start, end);
+
+            ReviewMyListDTO build = ReviewMyListDTO.builder()
+                    .myReviewOrderIdList(paginatedNewsList)
+                    .reviewNum(newsNum)
+                    .allPage(allPage)
+                    .pageSize(pageSize)
+                    .page(page)
+                    .build();
+
+            System.out.println("build :: " + build);
+
+
+            return build;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("뉴스 목록 처리 중 오류 발생", e);
+        }
+    }
 
 
 }

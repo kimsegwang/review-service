@@ -3,6 +3,7 @@ package com.example.reviewservice.service;
 import com.example.reviewservice.client.FileClient;
 import com.example.reviewservice.domain.Review;
 import com.example.reviewservice.dto.DetailReviewDTO;
+import com.example.reviewservice.dto.MyReviewOrderIdListDTO;
 import com.example.reviewservice.dto.ReviewDetailDTO;
 import com.example.reviewservice.mapper.ReviewMapper;
 import jakarta.validation.Valid;
@@ -30,6 +31,9 @@ public class ReviewService {
     }
 
     //개인리뷰 리스트
+    public List<MyReviewOrderIdListDTO> SelectMyReviewsList(String id) {
+        return reviewMapper.selectMyReviewOrderIdListList(id);
+    }
 
 
 
