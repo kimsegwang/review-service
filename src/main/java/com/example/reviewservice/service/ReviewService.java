@@ -4,6 +4,7 @@ import com.example.reviewservice.client.FileClient;
 import com.example.reviewservice.domain.Review;
 import com.example.reviewservice.dto.DetailReviewDTO;
 import com.example.reviewservice.dto.MyReviewOrderIdListDTO;
+import com.example.reviewservice.dto.ReviewCreateDTO;
 import com.example.reviewservice.dto.ReviewDetailDTO;
 import com.example.reviewservice.mapper.ReviewMapper;
 import jakarta.validation.Valid;
@@ -47,7 +48,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review createReview(@Valid Review review) {
+    public ReviewCreateDTO createReview(@Valid ReviewCreateDTO review) {
         List<String> imagePaths = parseImagePaths(review.getImg());
         // 이미지를 세미콜론으로 구분된 하나의 문자열로 결합
         String imgString = String.join(";", imagePaths);

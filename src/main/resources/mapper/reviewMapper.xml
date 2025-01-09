@@ -5,9 +5,16 @@
 
 <mapper namespace="com.example.reviewservice.mapper.ReviewMapper">
 
-    <insert id="insertReview" parameterType="com.example.reviewservice.domain.Review">
-        INSERT INTO review (title, content, author_id, rating, img)
-        VALUES (#{title}, #{content}, #{authorId}, #{rating}, #{img})
+    <!--  다중 쿼리문 (yml에서 허용해야됨) -->
+    <insert id="insertReview" parameterType="com.example.reviewservice.dto.ReviewCreateDTO">
+        <!-- 리뷰 INSERT -->
+        INSERT INTO review (title, content, author_id, rating, img, product_info, order_id)
+        VALUES (#{title}, #{content}, #{authorId}, #{rating}, #{img}, #{productName}, #{orderId});
+
+        <!-- 리뷰 상태 UPDATE -->
+        UPDATE completeproductpay
+        SET review = 1
+        WHERE orderId = #{orderId};
     </insert>
 
     <resultMap id="reviewDetailResultMap" type="com.example.reviewservice.dto.DetailReviewDTO">

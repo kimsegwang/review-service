@@ -2,10 +2,7 @@ package com.example.reviewservice.controller;
 
 
 import com.example.reviewservice.domain.Review;
-import com.example.reviewservice.dto.MyReviewOrderIdListDTO;
-import com.example.reviewservice.dto.ReviewDetailDTO;
-import com.example.reviewservice.dto.ReviewListDTO;
-import com.example.reviewservice.dto.ReviewMyListDTO;
+import com.example.reviewservice.dto.*;
 import com.example.reviewservice.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +21,10 @@ public class ReviewController {
 
     //리뷰 작성
     @PostMapping
-    public ResponseEntity<Review> post(@Valid @RequestBody Review review) {
-        Review createdReview = reviewService.createReview(review);
+    public ResponseEntity<ReviewCreateDTO> post(@Valid @RequestBody ReviewCreateDTO review) {
+        System.out.println(review.getOrderId());
+        System.out.println(review.getProductName());
+        ReviewCreateDTO createdReview = reviewService.createReview(review);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReview);
     }
 
