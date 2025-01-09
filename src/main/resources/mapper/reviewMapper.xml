@@ -64,5 +64,10 @@
         WHERE buyer = #{id} AND review = 0
     </select>
 
+    <select id="selectMyAllReviewOrderIdListList" parameterType="String">
+            SELECT id, product_info, order_id
+            FROM review
+            WHERE author_id = #{id}
+    </select>
 
 </mapper>

@@ -2,10 +2,7 @@ package com.example.reviewservice.service;
 
 import com.example.reviewservice.client.FileClient;
 import com.example.reviewservice.domain.Review;
-import com.example.reviewservice.dto.DetailReviewDTO;
-import com.example.reviewservice.dto.MyReviewOrderIdListDTO;
-import com.example.reviewservice.dto.ReviewCreateDTO;
-import com.example.reviewservice.dto.ReviewDetailDTO;
+import com.example.reviewservice.dto.*;
 import com.example.reviewservice.mapper.ReviewMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +28,16 @@ public class ReviewService {
         return reviewMapper.selectReviewsList();
     }
 
-    //개인리뷰 리스트
+    //작성 가능한 개인리뷰 리스트
     public List<MyReviewOrderIdListDTO> SelectMyReviewsList(String id) {
+        System.out.println("서비스1 "+id);
         return reviewMapper.selectMyReviewOrderIdListList(id);
+    }
+
+    //작성한 개인리뷰 리스트
+    public List<ReviewAllMyListDTO> SelectMyAllReviewsList(String id) {
+        System.out.println("서비스 "+id);
+        return reviewMapper.selectMyAllReviewOrderIdListList(id);
     }
 
 

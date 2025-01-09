@@ -88,7 +88,7 @@ public class ReviewController {
     }
 
 
-    //개인 전체 리뷰
+    //작성 가능한 개인 전체 리뷰
     @GetMapping("/myReview")
     public ReviewMyListDTO getMyReviews(
             @RequestParam String id,
@@ -117,6 +117,57 @@ public class ReviewController {
 
             ReviewMyListDTO build = ReviewMyListDTO.builder()
                     .myReviewOrderIdList(paginatedNewsList)
+                    .reviewNum(newsNum)
+                    .allPage(allPage)
+                    .pageSize(pageSize)
+                    .page(page)
+                    .build();
+
+            System.out.println("build :: " + build);
+
+
+            return build;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("뉴스 목록 처리 중 오류 발생", e);
+        }
+    }
+
+    //작성한 개인 전체 리뷰
+    @GetMapping("/myReviewList")
+    public AllReviewMyListDTO getMyReviewsList(
+            @RequestParam String id,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        System.out.println("id =="+id);
+        try {
+            int start = Math.max(0, (page - 1) * pageSize);
+            List<ReviewAllMyListDTO> allNewsList = reviewService.SelectMyAllReviewsList(id);
+            for(ReviewAllMyListDTO review : allNewsList) {
+                System.out.println("이게 상품"+review.getProduct_info());
+                System.out.println("이게 주문번호"+review.getOrder_id());
+
+            }
+            int newsNum = allNewsList.size();
+            int allPage = (int) Math.ceil((double) newsNum / pageSize);
+
+            int end = Math.min(start + pageSize, newsNum);
+
+            if (start >= newsNum) {
+                return AllReviewMyListDTO.builder()
+                        .myReviewList(List.of())
+                        .reviewNum(newsNum)
+                        .allPage(allPage)
+                        .pageSize(pageSize)
+                        .page(page)
+                        .build();
+            }
+
+            List<ReviewAllMyListDTO> paginatedNewsList = allNewsList.subList(start, end);
+            System.out.println(paginatedNewsList.get(0).getOrder_id());
+
+            AllReviewMyListDTO build = AllReviewMyListDTO.builder()
+                    .myReviewList(paginatedNewsList)
                     .reviewNum(newsNum)
                     .allPage(allPage)
                     .pageSize(pageSize)
