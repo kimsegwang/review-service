@@ -55,35 +55,27 @@ public class ReviewController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         try {
+            // start와 end 계산
             int start = Math.max(0, (page - 1) * pageSize);
-            List<Review> allNewsList = reviewService.SelectReviewsList();
-            int newsNum = allNewsList.size();
-            int allPage = (int) Math.ceil((double) newsNum / pageSize);
 
-            int end = Math.min(start + pageSize, newsNum);
+            // 서비스에서 페이징된 리뷰 데이터 가져오기
+            List<Review> reviews = reviewService.getPagedReviews(start, pageSize);
 
-            if (start >= newsNum) {
-                return ReviewListDTO.builder()
-                        .reviewList(List.of())
-                        .reviewNum(newsNum)
-                        .allPage(allPage)
-                        .pageSize(pageSize)
-                        .page(page)
-                        .build();
-            }
+            // 전체 리뷰 수를 가져와서 총 페이지 계산
+            int reviewNum = reviewService.getReviewCount();
+            int allPage = (int) Math.ceil((double) reviewNum / pageSize);
 
-            List<Review> paginatedNewsList = allNewsList.subList(start, end);
-
+            // DTO 반환
             return ReviewListDTO.builder()
-                    .reviewList(paginatedNewsList)
-                    .reviewNum(newsNum)
+                    .reviewList(reviews)
+                    .reviewNum(reviewNum)
                     .allPage(allPage)
                     .pageSize(pageSize)
                     .page(page)
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("뉴스 목록 처리 중 오류 발생", e);
+            throw new RuntimeException("리뷰 목록 처리 중 오류 발생", e);
         }
     }
 

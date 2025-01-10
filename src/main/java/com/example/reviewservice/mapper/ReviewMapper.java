@@ -29,4 +29,8 @@ public interface ReviewMapper {
     List<MyReviewOrderIdListDTO> selectMyReviewOrderIdListList(String id);
 
     List<ReviewAllMyListDTO> selectMyAllReviewOrderIdListList(String id);
+
+    List<Review> selectPagedReviews(int start, int pageSize);
+
+    int selectReviewCount();
 }

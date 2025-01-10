@@ -24,8 +24,14 @@ public class ReviewService {
     private final FileClient fileClient;
 
     //전체리뷰 리스트
-    public List<Review> SelectReviewsList() {
-        return reviewMapper.selectReviewsList();
+// 페이징된 리뷰 리스트 반환
+    public List<Review> getPagedReviews(int start, int pageSize) {
+        return reviewMapper.selectPagedReviews(start, pageSize);
+    }
+
+    // 전체 리뷰 수 반환 (페이징을 위해)
+    public int getReviewCount() {
+        return reviewMapper.selectReviewCount();
     }
 
     //작성 가능한 개인리뷰 리스트

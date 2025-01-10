@@ -49,10 +49,17 @@
         WHERE id = #{id}
     </update>
 
-    <select id="selectReviewsList" resultMap="reviewDetailResultMap">
+    <select id="selectPagedReviews" resultMap="reviewDetailResultMap">
         SELECT id, title, author_id, rating
         FROM review
         ORDER BY id DESC
+            LIMIT #{start}, #{pageSize}
+    </select>
+
+    <!-- 전체 리뷰 수를 구하는 쿼리 -->
+    <select id="selectReviewCount" resultType="int">
+        SELECT COUNT(*)
+        FROM review
     </select>
 
 
