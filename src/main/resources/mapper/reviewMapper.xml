@@ -34,11 +34,9 @@
             id = #{id}
     </select>
 
-    <delete id="deleteByIds">
-        DELETE FROM review WHERE id IN
-        <foreach item="id" collection="ids" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+    <delete id="deleteByIds" parameterType="Long">
+        DELETE FROM review
+        WHERE id= #{id}
     </delete>
 
     <update id="updateReview" parameterType="com.example.reviewservice.domain.Review">

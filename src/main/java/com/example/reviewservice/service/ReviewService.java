@@ -107,10 +107,8 @@ public class ReviewService {
 
 
     //리뷰 삭제
-    public void removeReview(List<Long> ids) {
-        if (ids != null && !ids.isEmpty()) {
-            reviewMapper.deleteByIds(ids);
-        }
+    public void removeReview(Long id) {
+            reviewMapper.deleteByIds(id);
     }
 
 

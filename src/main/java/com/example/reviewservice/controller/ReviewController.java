@@ -38,8 +38,8 @@ public class ReviewController {
     //리뷰 삭제
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@RequestBody List<Long> ids) {
-        reviewService.removeReview(ids);
+    public void delete(@RequestBody Long id) {
+        reviewService.removeReview(id);
     }
 
 

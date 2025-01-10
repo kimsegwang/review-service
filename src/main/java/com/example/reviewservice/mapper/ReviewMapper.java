@@ -20,7 +20,7 @@ public interface ReviewMapper {
 
     DetailReviewDTO selectReviewById(Long id);
 
-    void deleteByIds(List<Long> ids);
+    void deleteByIds(Long id);
 
     void updateReview(Review review);
 
