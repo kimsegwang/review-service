@@ -102,11 +102,14 @@ public class ReviewService {
         System.out.println("arr ::" + Arrays.toString(arr));
         List<String> imgPaths = Arrays.asList(arr);
         System.out.println(imgPaths);
+        List<String> imgList = List.of();
+        if (!imgPaths.getFirst().isEmpty()) {
+            imgList = fileClient.getImg(imgPaths);
+            System.out.println("이미지 리스트는 :: "+imgList);
+        }
         // 3. FeignClient를 사용해 이미지 정보 가져오기
-        List<String> imgList = fileClient.getImg(imgPaths);
-        System.out.println("이미지 리스트는 :: "+imgList);
+       
         // Products와 인코딩된 이미지를 매칭하여 DTO 리스트를 생성
-
         return ReviewDetailDTO.builder()
                 .id(ReviewList.getId())
                 .title(ReviewList.getTitle())
