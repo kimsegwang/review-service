@@ -12,4 +12,5 @@ public interface FileClient {
     List<String> getImg(@RequestBody List<String> imgPaths);
 
 
+
 }

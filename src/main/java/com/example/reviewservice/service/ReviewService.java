@@ -1,5 +1,6 @@
 package com.example.reviewservice.service;
 
+import com.example.reviewservice.S3.S3Service;
 import com.example.reviewservice.client.FileClient;
 import com.example.reviewservice.domain.Review;
 import com.example.reviewservice.dto.*;
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +26,7 @@ import java.util.List;
 public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final FileClient fileClient;
+    private final S3Service s3service;
 
     //전체리뷰 리스트
 // 페이징된 리뷰 리스트 반환
@@ -58,30 +63,30 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewCreateDTO createReview(@Valid ReviewCreateDTO review) {
-        List<String> imagePaths = parseImagePaths(review.getImg());
-        // 이미지를 세미콜론으로 구분된 하나의 문자열로 결합
-        String imgString = String.join(";", imagePaths);
-        review.setImg(imgString);  // 뉴스 객체에 결합된 이미지 경로 설정
-        // Mapper 호출하여 DB에 저장
+    public ReviewCreateDTO createReview(ReviewCreateDTO review) throws IOException {
+        if (review.getImg() != null && review.getImg().length() > 0) {
+            List<String> str= Arrays.asList(review.getImg().split(";"));
+            System.out.println("이미지는"+review.getImg());
+            StringBuilder s3Urls = new StringBuilder();
+            for (String file : str) {
+                String s3Url = s3service.uploadFile(file);
+                if (s3Urls.length() > 0) {
+                    s3Urls.append(";");  // 이미지 URL을 세미콜론으로 구분
+                }
+                s3Urls.append(s3Url);
+            }
+            review.setImg(s3Urls.toString()); // 여러 이미지 URL을 세미콜론으로 구분하여 저장
+        }
+
         int result = reviewMapper.insertReview(review);
         if (result > 0) {
             return review;
         } else {
-            throw new RuntimeException("Failed to insert review");
+            throw new RuntimeException("리뷰 등록 실패");
         }
-
     }
 
-    //리뷰 수정
 
-    @Transactional
-    public void updateReview(Review review) {
-        List<String> imagePaths = parseImagePaths(review.getImg());
-        String imgString = String.join(";", imagePaths);
-        review.setImg(imgString);
-        reviewMapper.updateReview(review);
-    }
 
     //상세 리뷰
     public ReviewDetailDTO getReviewId(Long id) {
@@ -94,10 +99,12 @@ public class ReviewService {
 //                .collect(Collectors.toList());
 
         String[] arr = ReviewList.getImg().split(";");
+        System.out.println("arr ::" + Arrays.toString(arr));
         List<String> imgPaths = Arrays.asList(arr);
-
+        System.out.println(imgPaths);
         // 3. FeignClient를 사용해 이미지 정보 가져오기
         List<String> imgList = fileClient.getImg(imgPaths);
+        System.out.println("이미지 리스트는 :: "+imgList);
         // Products와 인코딩된 이미지를 매칭하여 DTO 리스트를 생성
 
         return ReviewDetailDTO.builder()

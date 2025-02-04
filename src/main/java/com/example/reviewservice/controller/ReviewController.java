@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class ReviewController {
 
     //리뷰 작성
     @PostMapping
-    public ResponseEntity<ReviewCreateDTO> post(@Valid @RequestBody ReviewCreateDTO review) {
+    public ResponseEntity<ReviewCreateDTO> post(@Valid @RequestBody ReviewCreateDTO review) throws IOException {
         System.out.println(review.getOrderId());
         System.out.println(review.getProductName());
         ReviewCreateDTO createdReview = reviewService.createReview(review);
@@ -43,11 +44,6 @@ public class ReviewController {
     }
 
 
-    //리뷰 수정
-    @PutMapping
-    public void put(@Valid @RequestBody Review review) {
-        reviewService.updateReview(review);
-    }
 
     //전체 리뷰
     @GetMapping

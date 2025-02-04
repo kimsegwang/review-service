@@ -73,6 +73,7 @@
             SELECT id, product_info, order_id
             FROM review
             WHERE author_id = #{id}
+            ORDER BY id DESC
     </select>
 
 </mapper>

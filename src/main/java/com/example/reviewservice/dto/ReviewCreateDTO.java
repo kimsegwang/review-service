@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 
@@ -12,16 +13,16 @@ import java.time.Instant;
 public class ReviewCreateDTO {
 
     private Long id;
-
     private String title;
-
     private String content;
 
     @Column("author_id")
     private String authorId;
 
-    @Column("img") // 여러 이미지 경로를 ';'로 연결
+    @Column("img")// S3에서 반환된 이미지 URL 저장
     private String img;
+
+    private MultipartFile[] imgFile; // 여러 파일을 업로드할 수 있도록 배열로 수정
 
     @Column("rating")
     private double rating;
@@ -36,3 +37,4 @@ public class ReviewCreateDTO {
     @Column("product_info")
     private String productName;
 }
+
