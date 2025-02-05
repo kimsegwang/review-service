@@ -7,8 +7,10 @@ import com.example.reviewservice.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,11 +23,26 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     //리뷰 작성
-    @PostMapping
-    public ResponseEntity<ReviewCreateDTO> post(@Valid @RequestBody ReviewCreateDTO review) throws IOException {
-        System.out.println(review.getOrderId());
-        System.out.println(review.getProductName());
-        ReviewCreateDTO createdReview = reviewService.createReview(review);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ReviewCreateDTO> post(
+            @RequestPart("title") String title,
+            @RequestPart("content") String content,
+            @RequestParam("rating") double rating,
+            @RequestPart("userId") String userId,
+            @RequestPart("orderId") String orderId,
+            @RequestPart("productName") String productName,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images // images는 선택적으로 받음
+    ) throws IOException {
+        System.out.println("이미지:::"+images);
+        ReviewCreateDTO review = new ReviewCreateDTO();
+        review.setTitle(title);
+        review.setContent(content);
+        review.setRating(rating);
+        review.setAuthorId(userId);
+        review.setOrderId(orderId);
+        review.setProductName(productName);
+
+        ReviewCreateDTO createdReview = reviewService.createReview(review, images);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReview);
     }
 

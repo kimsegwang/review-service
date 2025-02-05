@@ -63,12 +63,11 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewCreateDTO createReview(ReviewCreateDTO review) throws IOException {
-        if (review.getImg() != null && review.getImg().length() > 0) {
-            List<String> str= Arrays.asList(review.getImg().split(";"));
-            System.out.println("이미지는"+review.getImg());
+    public ReviewCreateDTO createReview(ReviewCreateDTO review, List<MultipartFile> images) throws IOException {
+        if (images != null) {
+            System.out.println("이미지는"+images);
             StringBuilder s3Urls = new StringBuilder();
-            for (String file : str) {
+            for (MultipartFile file : images) {
                 String s3Url = s3service.uploadFile(file);
                 if (s3Urls.length() > 0) {
                     s3Urls.append(";");  // 이미지 URL을 세미콜론으로 구분

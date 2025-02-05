@@ -16,13 +16,11 @@ import java.util.List;
 public interface ReviewMapper {
 
 
-    int insertReview(@Valid ReviewCreateDTO review);
+    int insertReview(ReviewCreateDTO review);
 
     DetailReviewDTO selectReviewById(Long id);
 
     void deleteByIds(Long id);
-
-    void updateReview(Review review);
 
     List<Review> selectReviewsList();
 
